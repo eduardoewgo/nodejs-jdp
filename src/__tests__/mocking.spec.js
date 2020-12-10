@@ -34,7 +34,7 @@ describe('Mocking Data', () => {
 
     const req = { body: { mobilityItemId: 1 } }
     const res = { json: jest.fn() }
-    const expected = { mobilityItem: undefined, mobilityOffers: undefined }
+    const expected = { mobilityItem: {}, mobilityOffers: {} }
 
     mobilityController.getMobilityItemOffers(req, res)
 
