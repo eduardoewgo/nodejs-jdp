@@ -85,6 +85,8 @@ describe('Mocking Data', () => {
     const res = { json: jest.fn() }
 
     mobilityController.getMobilityItemOffers(req, res)
+
+    // const calls = mobilityService.getMobilityItem.mock.calls
     expect(mobilityService.getMobilityItem).toHaveBeenCalledTimes(1)
     expect(mobilityService.getMobilityItem).toHaveBeenCalledWith(req.body.mobilityItemId)
 
@@ -107,7 +109,9 @@ describe('Mocking Data', () => {
     const res = { json: jest.fn() }
 
     mobilityController.getMobilityItemOffers(req, res)
-    expect(res.json).toHaveBeenCalledTimes(1)
-    expect(res.json).toHaveBeenCalledWith({ mobilityItem: { id: req.body.mobilityItemId, awesome: 'stuff' }, mobilityOffers: [] })
+
+    // const results = mobilityService.getMobilityItem.mock.results
+    expect(mobilityService.getMobilityItem).toHaveReturnedWith({ id: req.body.mobilityItemId, awesome: 'stuff' })
+    expect(mobilityService.getMobilityItemOffers).toHaveReturnedWith([])
   })
 })
