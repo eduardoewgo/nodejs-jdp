@@ -72,4 +72,42 @@ describe('Mocking Data', () => {
 
     expect(res.json).toHaveBeenCalledTimes(1)
   })
+
+  it('should access and validate mocked calls', async () => {
+    const mobilityController = require('../controllers/mobility-controller')
+    const mobilityService = require('../services/mobility-service')
+
+    jest.mock('../services/mobility-service')
+    mobilityService.getMobilityItem = jest.fn()
+    mobilityService.getMobilityItemOffers = jest.fn()
+
+    const req = { body: { mobilityItemId: 1 } }
+    const res = { json: jest.fn() }
+
+    mobilityController.getMobilityItemOffers(req, res)
+    expect(mobilityService.getMobilityItem).toHaveBeenCalledTimes(1)
+    expect(mobilityService.getMobilityItem).toHaveBeenCalledWith(req.body.mobilityItemId)
+
+    expect(mobilityService.getMobilityItemOffers).toHaveBeenCalledTimes(1)
+    expect(mobilityService.getMobilityItemOffers).toHaveBeenCalledWith(req.body.mobilityItemId)
+  })
+
+  it('should mock implementations', async () => {
+    const mobilityController = require('../controllers/mobility-controller')
+    const mobilityService = require('../services/mobility-service')
+
+    jest.mock('../services/mobility-service')
+
+    mobilityService.getMobilityItem =
+      jest.fn().mockImplementation((id) => ({ id, awesome: 'stuff' }))
+    mobilityService.getMobilityItemOffers =
+      jest.fn().mockImplementation(() => [])
+
+    const req = { body: { mobilityItemId: 1 } }
+    const res = { json: jest.fn() }
+
+    mobilityController.getMobilityItemOffers(req, res)
+    expect(res.json).toHaveBeenCalledTimes(1)
+    expect(res.json).toHaveBeenCalledWith({ mobilityItem: { id: req.body.mobilityItemId, awesome: 'stuff' }, mobilityOffers: [] })
+  })
 })
